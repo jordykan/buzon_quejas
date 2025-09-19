@@ -96,11 +96,10 @@ export default function ReportForm() {
                 ¡Reporte enviado exitosamente!
               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-                Tu reporte ha sido recibido y será procesado a la brevedad.
+                Tu reporte ha sido procesado en modo de prueba.
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Nos mantendremos en contacto si necesitamos información
-                adicional.
+                Para funcionalidad completa, descomenta el código de producción en /lib/actions.ts
               </p>
             </div>
             <div className="pt-4">
