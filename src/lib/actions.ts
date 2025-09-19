@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma'
 import { saveFile } from '@/lib/upload'
 import { reportSchema } from '@/lib/validations'
-import { redirect } from 'next/navigation'
+import { ZodError } from 'zod'
 
 export async function submitReport(formData: FormData) {
   try {
@@ -23,6 +23,10 @@ export async function submitReport(formData: FormData) {
 
     const validatedData = reportSchema.parse(validationData)
 
+    // MODO DE PRUEBA - Esta función solo simula el envío del reporte
+    // Para usar en producción, descomenta el código a continuación y configura las variables de entorno
+
+    /* CÓDIGO PARA PRODUCCIÓN - DESCOMENTA PARA USAR:
     let fileUrl: string | undefined = undefined
     if (file && file.size > 0) {
       try {
@@ -45,17 +49,30 @@ export async function submitReport(formData: FormData) {
         fileUrl
       }
     })
+    */
 
-    return { success: true, message: 'Reporte enviado exitosamente' }
+    // Simulación de respuesta exitosa para demostración
+    console.log('MODO DE PRUEBA - Datos del reporte:', {
+      fullName: validatedData.fullName,
+      category: validatedData.category,
+      area: validatedData.area,
+      message: validatedData.message,
+      hasFile: !!(file && file.size > 0)
+    })
+
+    return {
+      success: true,
+      message: '✅ MODO DE PRUEBA: Reporte procesado correctamente (no guardado en base de datos)'
+    }
 
   } catch (error) {
     console.error('Error creating report:', error)
 
-    if (error instanceof Error && 'issues' in error) {
+    if (error instanceof ZodError) {
       return {
         success: false,
         error: 'Datos inválidos',
-        details: (error as any).issues
+        details: error.issues
       }
     }
 
