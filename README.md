@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Buzón Integral
 
-## Getting Started
+Sistema web moderno para reportes confidenciales de quejas y sugerencias, desarrollado con Next.js 15, TailwindCSS, ShadCN UI y Prisma.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🔒 **Seguridad y Confidencialidad**: Reportes anónimos con máxima privacidad
+- 📱 **Diseño Responsivo**: Interfaz moderna tipo SaaS compatible con todos los dispositivos
+- 📁 **Carga de Archivos**: Drag & drop para adjuntar evidencias
+- ⚡ **Validación en Tiempo Real**: Validación de formularios con Zod
+- 🎨 **UI Profesional**: Componentes de ShadCN UI con estilo minimalista
+- 🗄️ **Base de Datos**: Persistencia con SQLite/PostgreSQL usando Prisma
+
+## Tecnologías
+
+- **Frontend**: Next.js 15 (App Router), TailwindCSS, ShadCN UI
+- **Backend**: Next.js API Routes, Server Actions
+- **Base de Datos**: Prisma ORM con SQLite (desarrollo)
+- **Validación**: Zod
+- **UI**: Lucide React icons, Sonner toasts
+
+## Instalación
+
+1. Clonar el repositorio
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+
+3. Configurar la base de datos:
+   ```bash
+   npx prisma migrate dev --name init
+   npx prisma generate
+   ```
+
+4. Ejecutar el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+
+5. Abrir [http://localhost:3001](http://localhost:3001) en el navegador
+
+## Estructura del Proyecto
+
+```
+src/
+├── app/
+│   ├── api/reports/          # API endpoints
+│   ├── globals.css          # Estilos globales
+│   ├── layout.tsx           # Layout principal
+│   └── page.tsx             # Página principal
+├── components/
+│   ├── ui/                  # Componentes ShadCN
+│   └── report-form.tsx      # Formulario principal
+└── lib/
+    ├── actions.ts           # Server Actions
+    ├── prisma.ts            # Cliente Prisma
+    ├── upload.ts            # Utilidades de archivos
+    ├── utils.ts             # Utilidades generales
+    └── validations.ts       # Esquemas Zod
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Funcionalidades
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Formulario de Reportes
+- Nombre completo (opcional)
+- Categorías: Discriminación, Corrupción, Inconformidades, Sugerencias
+- Área afectada
+- Mensaje detallado con guías
+- Carga de archivos con drag & drop
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Validaciones
+- Campos requeridos
+- Longitud mínima de mensajes
+- Tipos de archivo permitidos
+- Manejo de errores en tiempo real
 
-## Learn More
+### Confirmación
+- Mensaje de éxito después del envío
+- Toast notifications
+- Opción para enviar otro reporte
 
-To learn more about Next.js, take a look at the following resources:
+## Base de Datos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Modelo Report
+```prisma
+model Report {
+  id        String   @id @default(uuid())
+  fullName  String?
+  category  String
+  area      String
+  message   String
+  fileUrl   String?
+  createdAt DateTime @default(now())
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts Disponibles
 
-## Deploy on Vercel
+- `npm run dev` - Servidor de desarrollo
+- `npm run build` - Build de producción
+- `npm run start` - Servidor de producción
+- `npm run lint` - Linting
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Configuración para Producción
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Para producción, cambiar a PostgreSQL:
+
+1. Actualizar `prisma/schema.prisma`:
+   ```prisma
+   datasource db {
+     provider = "postgresql"
+     url      = env("DATABASE_URL")
+   }
+   ```
+
+2. Configurar variable de entorno:
+   ```
+   DATABASE_URL="postgresql://user:password@localhost:5432/buzon_db"
+   ```
+
+3. Ejecutar migración:
+   ```bash
+   npx prisma migrate deploy
+   ```
+
+## Estado del Proyecto
+
+✅ **Sistema completamente funcional** - Listo para usar en desarrollo
+
+- Frontend con diseño profesional implementado
+- Backend con API y validaciones funcionando
+- Base de datos configurada y migraciones aplicadas
+- Servidor de desarrollo ejecutándose en http://localhost:3001
+
+## Licencia
+
+MIT
