@@ -12,10 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { submitReport } from "@/lib/actions";
 import { Upload, FileText, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -43,27 +40,7 @@ export default function ReportForm() {
         formRef.current?.reset();
         setSelectedFile(null);
       } else {
-        console.log("Error result:", result);
-        // Mostrar errores específicos de validación de Zod
-        if (result.details && Array.isArray(result.details)) {
-          result.details.forEach((issue: any) => {
-            const fieldMap: { [key: string]: string } = {
-              'category': 'Categoría',
-              'area': 'Área',
-              'message': 'Mensaje',
-              'file': 'Archivo',
-              'fullName': 'Nombre completo'
-            };
-
-            const fieldName = fieldMap[issue.path?.[0]] || 'Campo';
-            const errorMessage = `${fieldName}: ${issue.message}`;
-            toast.error(errorMessage);
-          });
-        } else if (result.error) {
-          toast.error(result.error);
-        } else {
-          toast.error("Error al enviar el reporte. Por favor, verifica los datos.");
-        }
+        toast.error(result.error || "Error al enviar el reporte. Por favor, verifica los datos.");
         // IMPORTANTE: NO reseteamos el formulario aquí para preservar los datos del usuario
       }
     } catch (error) {
